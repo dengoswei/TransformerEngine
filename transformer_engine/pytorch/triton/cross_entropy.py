@@ -351,6 +351,10 @@ def cross_entropy_backward(
         grad_output, torch.tensor(1.0, device=grad_output.device)
     ):
         pass
+    # reduce = false case 
+    # sync buf fix from liger kernel mr #680 
+    elif grad_output.ndim > 0:
+        _input = _input * grad_output.unsqueeze(dim=1)
     else:
         B, SQ, V = _input.shape
         n_rows = B * SQ
